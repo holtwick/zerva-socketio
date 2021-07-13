@@ -1,0 +1,61 @@
+{
+  "name": "zerva-module-template",
+  "version": "0.1.2",
+  "description": "🌱 Zerva module template",
+  "main": "index.js",
+  "funding": {
+    "type": "GitHub Sponsors ❤",
+    "url": "https://github.com/sponsors/holtwick"
+  },
+  "keywords": [
+    "server",
+    "typescript",
+    "event"
+  ],
+  "author": {
+    "name": "Dirk Holtwick",
+    "url": "https://holtwick.de"
+  },
+  "license": "MIT",
+  "type": "module",
+  "typings": "dist/esm/index.d.ts",
+  "exports": {
+    "./ts": "./src/index.ts",
+    "./dist/": "./dist/",
+    ".": {
+      "node": "./dist/esm/index.js",
+      "default": "./dist/esm/index.js"
+    }
+  },
+  "module": "dist/esm/index.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=14.13.1"
+  },
+  "scripts": {
+    "start": "npm run watch",
+    "build": "npm run clean && npm run build:esm",
+    "build:esm": "tsc -p tsconfig.json",
+    "check": "tsc --noEmit -p tsconfig.json",
+    "clean": "rm -rf dist",
+    "watch": "tsc -w -p tsconfig.json",
+    "prepublishOnly": "npm run build",
+    "test": "jest src",
+    "global": "pnpm -g ln"
+  },
+  "dependencies": {
+    "zeed": "^0.3.10",
+    "zerva": "^0.2.8"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.24",
+    "@types/node": "^16.3.1",
+    "jest": "^27.0.6",
+    "jest-ts-webcompat-resolver": "^1.0.0",
+    "ts-jest": "^27.0.3",
+    "typescript": "^4.3.5"
+  }
+}
