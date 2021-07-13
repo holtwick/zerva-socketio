@@ -12,8 +12,8 @@
   },
   "dependencies": {
     "zeed": "^0.3.10",
-    "zerva": "^0.2.8",
-    "zerva-module-template": "file:.."
+    "zerva": "^0.2.9",
+    "zerva-socketio": "link:.."
   },
   "author": "Dirk Holtwick",
   "license": "MIT"
