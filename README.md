@@ -1,6 +1,6 @@
 # 🌱 Zerva Module Template
 
-**This is a side project of [Zerva](https://github.com/holtwick/zerva)** 
+**This is a side project of [Zerva](https://github.com/holtwick/zerva)**
 
 Start writing a module for Zerva by using this project as a template.
 
@@ -9,7 +9,7 @@ Start writing a module for Zerva by using this project as a template.
 - [ ] Adjust name and author in `package.json`
 - [ ] In `src/index.ts` change the event definitions and write your own `useXYZModule`
 
-You can build using 
+You can build using
 
 ```sh
 npm run build

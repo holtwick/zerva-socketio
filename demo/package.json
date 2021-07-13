@@ -13,7 +13,7 @@
   "dependencies": {
     "zeed": "^0.3.10",
     "zerva": "^0.2.9",
-    "zerva-socketio": "link:.."
+    "zerva-socketio": "file:.."
   },
   "author": "Dirk Holtwick",
   "license": "MIT"
