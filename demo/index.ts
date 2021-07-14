@@ -26,18 +26,13 @@ Logger.setHandlers([
 
 const log = Logger("app")
 
-import { emit, on, serve, useHttp } from "zerva"
-
-import { useCounter } from "zerva-module-template"
+import { serve, useHttp } from "zerva"
+import { useSocketIO } from "zerva-socketio"
 
 useHttp({
   port: valueToInteger(process.env.PORT, 8080),
 })
 
-on("counterIncrement", (counter) => {
-  log.info("counter inc", counter)
-})
-
-useCounter()
+useSocketIO({})
 
 serve()
