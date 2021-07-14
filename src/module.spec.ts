@@ -1,6 +1,6 @@
-import { lazyListener } from "zeed"
 import { io } from "socket.io-client"
 import { ZSocketIOConnection } from "./index"
+import { lazyListener } from "zeed"
 
 // npx jest src/simple.spec.ts --detectOpenHandles
 

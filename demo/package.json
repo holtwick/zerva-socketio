@@ -11,8 +11,8 @@
     "start": "zerva index.ts"
   },
   "dependencies": {
-    "zeed": "^0.3.10",
-    "zerva": "^0.2.9",
+    "zeed": "^0.4.2",
+    "zerva": "^0.2.10",
     "zerva-socketio": "file:.."
   },
   "author": "Dirk Holtwick",
