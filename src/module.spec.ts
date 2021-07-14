@@ -1,12 +1,34 @@
 import { io } from "socket.io-client"
 import { ZSocketIOConnection } from "./index"
-import { lazyListener } from "zeed"
+import { lazyListener, Logger, LoggerNodeHandler, LogLevel } from "zeed"
+import { useHttp, serve, emit } from "zerva"
+import { useSocketIO } from "./module"
 
-// npx jest src/simple.spec.ts --detectOpenHandles
+Logger.setHandlers([
+  LoggerNodeHandler({
+    level: LogLevel.info,
+    filter: "*",
+    colors: true,
+    padding: 16,
+    nameBrackets: false,
+    levelHelper: false,
+  }),
+])
 
-const url = `ws://localhost:${8080}`
+const port = 8888
+const url = `ws://localhost:${port}`
 
 describe("Socket", () => {
+  beforeAll(async () => {
+    useHttp({ port })
+    useSocketIO({})
+    await serve()
+  })
+
+  afterAll(async () => {
+    await emit("serveStop")
+  })
+
   it("should connect", async () => {
     const socket = io(url, {
       reconnectionDelayMax: 3000,

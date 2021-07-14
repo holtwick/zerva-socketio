@@ -52,7 +52,7 @@
     "socket.io": "^4.1.3",
     "socket.io-client": "^4.1.3",
     "zeed": "^0.4.2",
-    "zerva": "^0.2.11"
+    "zerva": "^0.3.1"
   },
   "devDependencies": {
     "@types/jest": "^26.0.24",
