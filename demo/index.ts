@@ -33,6 +33,6 @@ useHttp({
   port: valueToInteger(process.env.PORT, 8080),
 })
 
-useSocketIO()
+useSocketIO({})
 
 serve()
