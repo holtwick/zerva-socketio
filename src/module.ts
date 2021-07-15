@@ -1,7 +1,7 @@
 // (C)opyright 2021 Dirk Holtwick, holtwick.it. All rights reserved.
 
 import { Logger } from "zeed"
-import { on, emit, register } from "zerva"
+import { on, emit, register, onInit, requireModules } from "zerva"
 import { Server, Socket } from "socket.io"
 import { ZSocketIOConnection } from "./connection"
 
@@ -9,9 +9,17 @@ const name = "socketio"
 const log = Logger(`zerva:${name}`)
 
 export function useSocketIO(config: any) {
-  register(name, ["http"])
+  log("setup")
+
+  register(name)
+
+  onInit(() => {
+    requireModules("http")
+  })
 
   on("httpInit", ({ http }) => {
+    log("init")
+
     let io = new Server(http, {
       serveClient: false,
       cors: {
