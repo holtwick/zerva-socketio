@@ -3,7 +3,7 @@
 import { Logger } from "zeed"
 import { on, emit, register, onInit, requireModules } from "zerva"
 import { Server, Socket } from "socket.io"
-import { ZSocketIOConnection } from "./connection"
+import { ZSocketIOConnection } from "./connection-node"
 
 const name = "socketio"
 const log = Logger(`zerva:${name}`)
