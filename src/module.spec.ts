@@ -1,3 +1,5 @@
+// (C)opyright 2021-07-15 Dirk Holtwick, holtwick.it. All rights reserved.
+
 import { io } from "socket.io-client"
 import { ZSocketIOConnection } from "./index"
 import { lazyListener, Logger, LoggerNodeHandler, LogLevel } from "zeed"
