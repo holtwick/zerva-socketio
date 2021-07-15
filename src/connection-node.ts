@@ -8,6 +8,8 @@ declare global {
     socketIOConnect(conn: ZSocketIOConnection): void
     socketIODisconnect(conn: ZSocketIOConnection, error?: string): void
   }
+
+  interface ZSocketIOConnection {}
 }
 
 const log = Logger("conn")

@@ -7,17 +7,17 @@ import "./types"
 const log = Logger("socketio-conn")
 
 export class ZSocketIOConnection {
-  private socket: Socket
+  private socket?: Socket
 
   constructor(socket: Socket) {
     this.socket = socket
-    // this.socket.onAny((...args) => {
+    // this.socket?.onAny((...args) => {
     //   log("onAny", ...args)
     // })
   }
 
   get id(): string {
-    let id = this.socket.id
+    let id = this.socket?.id
     if (empty(id)) {
       log.warn("Expected to find a socket ID")
     }
@@ -25,7 +25,7 @@ export class ZSocketIOConnection {
   }
 
   get shortId() {
-    return String(this.socket.id || "").substr(0, 6)
+    return String(this.socket?.id || "").substr(0, 6)
   }
 
   emit<U extends keyof ZSocketIOEvents>(
@@ -34,7 +34,7 @@ export class ZSocketIOConnection {
   ): Promise<ReturnType<ZSocketIOEvents[U]>> {
     return new Promise((resolve) => {
       log("=> EMIT  ", this.shortId, event, JSON.stringify(args).substr(0, 40))
-      this.socket.emit(event, args[0], (value: any) => {
+      this.socket?.emit(event, args[0], (value: any) => {
         log(
           "->   EMIT",
           this.shortId,
@@ -51,7 +51,7 @@ export class ZSocketIOConnection {
     listener: ZSocketIOEvents[U]
   ) {
     // @ts-ignore
-    this.socket.on(event, async (data: any, callback: any) => {
+    this.socket?.on(event, async (data: any, callback: any) => {
       try {
         log(
           "=> ON    ",
@@ -75,15 +75,15 @@ export class ZSocketIOConnection {
   }
 
   onAny(fn: any) {
-    this.socket.onAny((...args) => {
+    this.socket?.onAny((...args) => {
       log("onAny", ...args)
       fn(...args)
     })
   }
 
   close() {
-    // this.socket.disconnect()
-    // this.socket = undefined
+    this.socket?.disconnect()
+    this.socket = undefined
   }
 
   static connect(host: string): ZSocketIOConnection {

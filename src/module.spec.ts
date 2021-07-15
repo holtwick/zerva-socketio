@@ -1,7 +1,7 @@
 // (C)opyright 2021-07-15 Dirk Holtwick, holtwick.it. All rights reserved.
 
 import { io } from "socket.io-client"
-import { ZSocketIOConnection } from "./index"
+import { ZSocketIOClientConnection, ZSocketIOConnection } from "./index"
 import { lazyListener, Logger, LoggerNodeHandler, LogLevel } from "zeed"
 import { useHttp, serve, emit } from "zerva"
 import { useSocketIO } from "./module"
@@ -61,5 +61,14 @@ describe("Socket", () => {
     expect(res).toEqual({ echo: "echo123" })
 
     socket.close()
+  })
+
+  it("should connect with client lib", async () => {
+    const conn = ZSocketIOClientConnection.connect(url)
+
+    let res = await conn.emit("serverPing", { echo: "echo123" })
+    expect(res).toEqual({ echo: "echo123" })
+
+    conn.close()
   })
 })

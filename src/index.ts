@@ -3,3 +3,5 @@
 export * from "./types"
 export * from "./module"
 export * from "./connection-node"
+
+export { ZSocketIOConnection as ZSocketIOClientConnection } from "./connection-browser"
