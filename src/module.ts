@@ -8,7 +8,9 @@ import { ZSocketIOConnection } from "./connection"
 const name = "socketio"
 const log = Logger(`zerva:${name}`)
 
-export function useSocketIO(config: any) {
+interface ZSocketIOConfig {}
+
+export function useSocketIO(config: ZSocketIOConfig = {}) {
   log("setup")
 
   register(name)
