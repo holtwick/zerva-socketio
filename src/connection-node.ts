@@ -1,9 +1,14 @@
 // (C)opyright 2021-07-15 Dirk Holtwick, holtwick.it. All rights reserved.
 
-import "./types"
-
 import { Logger, promisify, tryTimeout } from "zeed"
 import { Socket } from "socket.io"
+
+declare global {
+  interface ZContextEvents {
+    socketIOConnect(conn: ZSocketIOConnection): void
+    socketIODisconnect(conn: ZSocketIOConnection, error?: string): void
+  }
+}
 
 const log = Logger("conn")
 

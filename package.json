@@ -20,7 +20,7 @@
   "typings": "dist/index.d.ts",
   "exports": {
     ".": {
-      "browser": "./dist/index.js",
+      "browser": "./dist/index.browser.js",
       "require": "./dist/index.cjs",
       "node": "./dist/index.js",
       "default": "./dist/index.js"
@@ -38,7 +38,7 @@
     "start": "npm run watch",
     "build": "npm run clean && npm run build:tsup",
     "build:esm": "tsc -p tsconfig.json",
-    "build:tsup": "tsup src/index.ts --dts --sourcemap --format esm,cjs",
+    "build:tsup": "tsup src/index.ts src/index.browser.ts --dts --sourcemap --format esm,cjs",
     "check": "tsc --noEmit -p tsconfig.json",
     "clean": "rm -rf dist",
     "watch": "tsc -w -p tsconfig.json",
