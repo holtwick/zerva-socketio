@@ -2,6 +2,7 @@
   "name": "zerva-demo",
   "version": "1.0.0",
   "description": "Just a simple test",
+  "private": true,
   "type": "module",
   "main": "index.js",
   "engines": {
@@ -11,8 +12,8 @@
     "start": "zerva index.ts"
   },
   "dependencies": {
-    "zeed": "^0.4.2",
-    "zerva": "^0.3.1",
+    "zeed": "^0.5.10",
+    "zerva": "^0.4.8",
     "zerva-socketio": "file:.."
   },
   "author": "Dirk Holtwick",
