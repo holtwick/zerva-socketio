@@ -19,7 +19,7 @@ export class ZSocketIOConnection {
   socket: Socket
   timeout: number
   verified: boolean = false
-  log
+  log: any
 
   constructor(socket: any, timeout: number = 1000) {
     this.socket = socket
@@ -59,7 +59,7 @@ export class ZSocketIOConnection {
         let result = await promisify(listener(data))
         this.log("->", result, "on", event)
         if (callback) callback(result)
-      } catch (err) {
+      } catch (err: any) {
         this.log("-> error:", err, "on", event)
         if (callback) callback({ error: err.message })
       }
