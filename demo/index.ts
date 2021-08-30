@@ -26,11 +26,19 @@ Logger.setHandlers([
 
 const log = Logger("app")
 
-import { serve, useHttp } from "zerva"
+import { on, serve, useHttp } from "zerva"
 import { useSocketIO } from "zerva-socketio"
 
 useHttp({
   port: valueToInteger(process.env.PORT, 8080),
+})
+
+on("socketIOConnect", (conn) => {
+  log.info("connection opened", conn)
+})
+
+on("socketIODisconnect", (conn) => {
+  log.info("connection closed", conn)
 })
 
 useSocketIO({})
