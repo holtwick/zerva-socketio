@@ -67,7 +67,7 @@ export class ZSocketIOConnection {
           result ? JSON.stringify(result).substr(0, 40) : ""
         )
         if (callback) callback(result)
-      } catch (err) {
+      } catch (err: any) {
         log.warn("#>   ON  ", this.shortId, event, err)
         if (callback) callback({ error: err.message })
       }
