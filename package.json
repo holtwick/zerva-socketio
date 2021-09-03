@@ -49,8 +49,8 @@
     "engine.io": "^5.2.0",
     "socket.io": "^4.2.0",
     "socket.io-client": "^4.2.0",
-    "zeed": "^0.6.21",
-    "zerva": "^0.4.26"
+    "zeed": "^0.6.22",
+    "zerva": "^0.4.27"
   },
   "devDependencies": {
     "@types/jest": "^27.0.1",
