@@ -86,9 +86,11 @@ export class ZSocketIOConnection {
     this.socket = undefined
   }
 
-  public static connect(host: string): ZSocketIOConnection {
-    log("connect", host)
-    const socket = io(host, {
+  public static connect(host?: string): ZSocketIOConnection {
+    let wsHost =
+      host ?? "ws" + location.protocol.substr(4) + "//" + location.host
+    log("connect", wsHost)
+    const socket = io(wsHost, {
       reconnectionDelayMax: 3000,
       transports: ["websocket"],
     })
