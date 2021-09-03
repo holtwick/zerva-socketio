@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "zeed": "^0.5.12",
-    "zerva": "^0.4.25",
+    "zerva": "^0.4.27",
     "zerva-socketio": "file:.."
   },
   "author": "Dirk Holtwick",
