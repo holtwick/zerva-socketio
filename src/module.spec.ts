@@ -55,7 +55,7 @@ describe("Socket", () => {
     })
     expect(socket).not.toBeNull()
 
-    const conn = new ZSocketIOConnection(socket)
+    const conn = new ZSocketIOConnection(socket, 1000)
 
     let res = await conn.emit("serverPing", { echo: "echo123" })
     expect(res).toEqual({ echo: "echo123" })
