@@ -19,7 +19,7 @@ export class ZSocketIOConnection {
   verified: boolean = false
   log: any
 
-  constructor(socket: any, timeout: number = 1000) {
+  constructor(socket: any, timeout: number = -1) {
     this.socket = socket
     this.id = socket.id
     this.timeout = timeout
