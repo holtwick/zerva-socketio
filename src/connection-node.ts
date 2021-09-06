@@ -32,12 +32,14 @@ export class ZSocketIOConnection {
     ...args: Parameters<ZSocketIOEvents[U]>
   ): Promise<ReturnType<ZSocketIOEvents[U]> | null> {
     try {
-      return await tryTimeout(
-        new Promise((resolve) => {
-          this.log("emit", event)
-          this.socket.emit(event, args[0], resolve)
-        }),
-        this.timeout
+      return (
+        (await tryTimeout(
+          new Promise((resolve) => {
+            this.log("emit", event)
+            this.socket.emit(event, args[0], resolve)
+          }),
+          this.timeout
+        )) ?? null
       )
     } catch (err) {
       this.log.warn("emit error", err, event)
@@ -77,15 +79,15 @@ export class ZSocketIOConnection {
     this.socket.on("error", fn)
   }
 
-  // static async broadcast<U extends keyof VSocketEvents>(
-  //   connections: VSocketConnection[],
-  //   event: U,
-  //   ...args: Parameters<VSocketEvents[U]>
-  // ): Promise<void> {
-  //   this.log(
-  //     "broadcast to",
-  //     connections.map((conn) => conn.id)
-  //   )
-  //   await Promise.all(connections.map((conn) => conn.emit(event, ...args)))
-  // }
+  static async broadcast<U extends keyof ZSocketIOEvents>(
+    connections: ZSocketIOConnection[],
+    event: U,
+    ...args: Parameters<ZSocketIOEvents[U]>
+  ): Promise<void> {
+    log(
+      "broadcast to",
+      connections.map((conn) => conn.id)
+    )
+    await Promise.all(connections.map((conn) => conn.emit(event, ...args)))
+  }
 }
