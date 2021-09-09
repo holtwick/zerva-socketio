@@ -6,7 +6,7 @@ import { Server, Socket } from "socket.io"
 import { ZSocketIOConnection } from "./connection-node"
 
 const name = "socketio"
-const log = Logger(`zerva:${name}`)
+const log = Logger(name)
 
 interface ZSocketIOConfig {}
 
@@ -31,7 +31,8 @@ export function useSocketIO(config: ZSocketIOConfig = {}) {
     })
 
     io.on("connection", (socket: Socket) => {
-      const log = Logger(`${name}:${socket?.id?.substr(0, 6)}`)
+      // Socket ID first, to have ahomegenous coloring
+      const log = Logger(`${socket?.id?.substr(0, 6)}:${name}`)
       log.info("connection", socket.id)
       let conn = new ZSocketIOConnection(socket)
 
