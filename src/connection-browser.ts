@@ -91,8 +91,11 @@ export class ZSocketIOConnection {
       host ?? "ws" + location.protocol.substr(4) + "//" + location.host
     log("connect", wsHost)
     const socket = io(wsHost, {
+      // transports: ["websocket"],
+      reconnection: true,
+      reconnectionDelay: 1000,
       reconnectionDelayMax: 3000,
-      transports: ["websocket"],
+      reconnectionAttempts: Infinity,
     })
     const conn = new ZSocketIOConnection(socket)
     // let didResolve = false
@@ -101,7 +104,10 @@ export class ZSocketIOConnection {
     //   didResolve = true
     // })
     socket.on("error", (err) => conn.close())
-    socket.on("disconnect", (err) => conn.close())
+    socket.on("disconnect", (err) => {
+      // conn.close()
+      socket.open()
+    })
     return conn
   }
 
