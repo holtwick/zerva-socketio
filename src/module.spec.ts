@@ -8,10 +8,10 @@ import { useSocketIO } from "./module"
 
 Logger.setHandlers([
   LoggerNodeHandler({
-    level: LogLevel.info,
+    level: LogLevel.debug,
     filter: "*",
     colors: true,
-    padding: 16,
+    fill: 32,
     nameBrackets: false,
     levelHelper: false,
   }),
@@ -49,6 +49,7 @@ describe("Socket", () => {
   })
 
   it("should connect typed", async () => {
+    expect.assertions(2)
     const socket = io(url, {
       reconnectionDelayMax: 3000,
       transports: ["websocket"],
@@ -64,11 +65,10 @@ describe("Socket", () => {
   })
 
   it("should connect with client lib", async () => {
+    expect.assertions(1)
     const conn = ZSocketIOClientConnection.connect(url)
-
     let res = await conn.emit("serverPing", { echo: "echo123" })
     expect(res).toEqual({ echo: "echo123" })
-
     conn.close()
   })
 })
