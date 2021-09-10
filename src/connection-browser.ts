@@ -97,12 +97,13 @@ export class ZSocketIOConnection {
     log("start connecting to", wsHost)
     const socket = io(wsHost, {
       transports: ["websocket"],
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 3000,
+      reconnectionAttempts: Infinity,
       ...options,
     })
-    // reconnection: true,
-    // reconnectionDelay: 1000,
-    // reconnectionDelayMax: 3000,
-    // reconnectionAttempts: Infinity,
+
     const conn = new ZSocketIOConnection(socket)
 
     // let didResolve = false
