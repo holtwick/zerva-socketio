@@ -1,10 +1,13 @@
 import { empty, Logger, promisify } from "zeed"
-import { Socket } from "socket.io-client"
+import { Socket, ManagerOptions, SocketOptions } from "socket.io-client"
 import io from "socket.io-client"
 
 import "./types"
 
-const log = Logger("socketio-conn")
+const log = Logger("websocket")
+
+export const getWebsocketUrlFromLocation = () =>
+  "ws" + location.protocol.substr(4) + "//" + location.host
 
 export class ZSocketIOConnection {
   private socket?: Socket
@@ -82,31 +85,43 @@ export class ZSocketIOConnection {
   }
 
   close() {
-    this.socket?.disconnect()
+    this.socket?.close()
     this.socket = undefined
   }
 
-  public static connect(host?: string): ZSocketIOConnection {
-    let wsHost =
-      host ?? "ws" + location.protocol.substr(4) + "//" + location.host
-    log("connect", wsHost)
+  public static connect(
+    host?: string,
+    options?: ManagerOptions & SocketOptions
+  ): ZSocketIOConnection {
+    let wsHost = host ?? getWebsocketUrlFromLocation()
+    log("start connecting to", wsHost)
     const socket = io(wsHost, {
-      // transports: ["websocket"],
+      transports: ["websocket"],
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 3000,
       reconnectionAttempts: Infinity,
+      ...options,
     })
+
     const conn = new ZSocketIOConnection(socket)
+
     // let didResolve = false
-    // socket.on("connect", () => {
-    //   if (!didResolve) resolve(conn)
-    //   didResolve = true
-    // })
-    socket.on("error", (err) => conn.close())
-    socket.on("disconnect", (err) => {
+    socket.on("connect", () => {
+      log(`on connect`)
+      //   if (!didResolve) resolve(conn)
+      //   didResolve = true
+    })
+
+    socket.on("error", (err) => {
+      log(`on error:`, err)
       // conn.close()
-      socket.open()
+    })
+
+    socket.on("disconnect", (err) => {
+      log(`on disconnect:`, err)
+      // socket.close()
+      // socket.open()
     })
     return conn
   }
