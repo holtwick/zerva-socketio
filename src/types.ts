@@ -2,6 +2,10 @@
 
 export {}
 
+export interface ZSocketEmitOptions {
+  timeout?: number
+}
+
 declare global {
   interface ZSocketIOEvents {
     serverPing(data: any): any

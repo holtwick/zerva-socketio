@@ -2,6 +2,7 @@
 
 import { Logger, promisify, tryTimeout } from "zeed"
 import { Socket } from "socket.io"
+import { ZSocketEmitOptions } from "./types"
 
 declare global {
   interface ZContextEvents {
@@ -43,7 +44,28 @@ export class ZSocketIOConnection {
         )) ?? null
       )
     } catch (err) {
-      this.log.warn("emit error", err, event)
+      this.log.warn(`emit(${event})`, err)
+    }
+    return null
+  }
+
+  async emitWithOptions<U extends keyof ZSocketIOEvents>(
+    event: U,
+    options: ZSocketEmitOptions,
+    ...args: Parameters<ZSocketIOEvents[U]>
+  ): Promise<ReturnType<ZSocketIOEvents[U]> | null> {
+    try {
+      return (
+        (await tryTimeout(
+          new Promise((resolve) => {
+            this.log(`emit(${event})`, args)
+            this.socket.emit(event, args[0], resolve)
+          }),
+          options?.timeout || this.timeout
+        )) ?? null
+      )
+    } catch (err) {
+      this.log.warn(`emit(${event})`, err)
     }
     return null
   }

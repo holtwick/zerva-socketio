@@ -65,10 +65,11 @@ describe("Socket", () => {
   })
 
   it("should connect with client lib", async () => {
-    expect.assertions(1)
+    expect.assertions(2)
     const conn = ZSocketIOClientConnection.connect(url)
-    let res = await conn.emit("serverPing", { echo: "echo123" })
+    expect(conn).not.toBeNull()
+    let res = await conn?.emit("serverPing", { echo: "echo123" })
     expect(res).toEqual({ echo: "echo123" })
-    conn.close()
+    conn?.close()
   })
 })
