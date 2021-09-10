@@ -5,7 +5,7 @@ import { on, emit, register, onInit, requireModules } from "zerva"
 import { Server, Socket } from "socket.io"
 import { ZSocketIOConnection } from "./connection-node"
 
-const name = "socketio"
+const name = "zerva:socketio"
 const log = Logger(name)
 
 interface ZSocketIOConfig {}

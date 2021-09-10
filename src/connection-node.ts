@@ -10,7 +10,8 @@ declare global {
   }
 }
 
-const log = Logger("conn")
+const logName = "ws-server"
+const log = Logger(logName)
 
 export class ZSocketIOConnection {
   id: string
@@ -23,7 +24,7 @@ export class ZSocketIOConnection {
     this.socket = socket
     this.id = socket.id
     this.timeout = timeout
-    this.log = Logger(`conn:${this.id?.substr(0, 6)}`)
+    this.log = Logger(`${this.id?.substr(0, 6)}:${logName}`)
   }
 
   /** Emits event and can return result. On timeout or other error `null` will be returned */
@@ -35,7 +36,7 @@ export class ZSocketIOConnection {
       return (
         (await tryTimeout(
           new Promise((resolve) => {
-            this.log("emit", event)
+            this.log(`emit(${event})`, args)
             this.socket.emit(event, args[0], resolve)
           }),
           this.timeout
@@ -55,12 +56,12 @@ export class ZSocketIOConnection {
     // @ts-ignore
     this.socket.on(event, async (data: any, callback: any) => {
       try {
-        this.log("on", event)
+        this.log(`on(${event})`)
         let result = await promisify(listener(data))
-        this.log("->", result, "on", event)
+        this.log(`our response on(${event})`, result)
         if (callback) callback(result)
       } catch (err: any) {
-        this.log("-> error:", err, "on", event)
+        this.log.warn(`error for on(${event})`, err)
         if (callback) callback({ error: err.message })
       }
     })

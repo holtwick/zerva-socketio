@@ -1,19 +1,45 @@
-import { empty, Logger, promisify } from "zeed"
+import { empty, Logger, LoggerInterface, promisify } from "zeed"
 import { Socket, ManagerOptions, SocketOptions } from "socket.io-client"
 import io from "socket.io-client"
 
 import "./types"
 
-const log = Logger("websocket")
+const logName = "ws-client"
+const log = Logger(logName)
 
 export const getWebsocketUrlFromLocation = () =>
   "ws" + location.protocol.substr(4) + "//" + location.host
 
 export class ZSocketIOConnection {
   private socket?: Socket
+  private log: LoggerInterface = log
 
   constructor(socket: Socket) {
     this.socket = socket
+
+    if (this.socket?.id) {
+      this.log = Logger(`${this.socket?.id?.substr(0, 6)}:${logName}`)
+    }
+
+    // let didResolve = false
+    socket.on("connect", () => {
+      this.log = Logger(`${this.socket?.id?.substr(0, 6)}:${logName}`)
+      this.log(`on connect`)
+      //   if (!didResolve) resolve(conn)
+      //   didResolve = true
+    })
+
+    socket.on("error", (err) => {
+      this.log(`on error:`, err)
+      // conn.close()
+    })
+
+    socket.on("disconnect", (err) => {
+      this.log(`on disconnect:`, err)
+      // socket.close()
+      // socket.open()
+    })
+
     // this.socket?.onAny((...args) => {
     //   log("onAny", ...args)
     // })
@@ -36,14 +62,9 @@ export class ZSocketIOConnection {
     ...args: Parameters<ZSocketIOEvents[U]>
   ): Promise<ReturnType<ZSocketIOEvents[U]>> {
     return new Promise((resolve) => {
-      log("=> EMIT  ", this.shortId, event, JSON.stringify(args).substr(0, 40))
+      this.log(`emit(${event})`, args)
       this.socket?.emit(event, args[0], (value: any) => {
-        log(
-          "->   EMIT",
-          this.shortId,
-          event,
-          JSON.stringify(value).substr(0, 40)
-        )
+        this.log(`response for emit(${event}) =`, value)
         resolve(value)
       })
     })
@@ -56,22 +77,12 @@ export class ZSocketIOConnection {
     // @ts-ignore
     this.socket?.on(event, async (data: any, callback: any) => {
       try {
-        log(
-          "=> ON    ",
-          this.shortId,
-          event,
-          JSON.stringify(data).substr(0, 40)
-        )
+        this.log(`on(${event})`, data)
         let result = await promisify(listener(data))
-        log(
-          "->   ON  ",
-          this.shortId,
-          event,
-          result ? JSON.stringify(result).substr(0, 40) : ""
-        )
+        this.log(`our resonse on(${event})`, result)
         if (callback) callback(result)
       } catch (err: any) {
-        log.warn("#>   ON  ", this.shortId, event, err)
+        this.log.warn(`warnung on(${event})`, err)
         if (callback) callback({ error: err.message })
       }
     })
@@ -79,7 +90,7 @@ export class ZSocketIOConnection {
 
   onAny(fn: any) {
     this.socket?.onAny((...args) => {
-      log("onAny", ...args)
+      this.log("onAny", ...args)
       fn(...args)
     })
   }
@@ -106,23 +117,6 @@ export class ZSocketIOConnection {
 
     const conn = new ZSocketIOConnection(socket)
 
-    // let didResolve = false
-    socket.on("connect", () => {
-      log(`on connect`)
-      //   if (!didResolve) resolve(conn)
-      //   didResolve = true
-    })
-
-    socket.on("error", (err) => {
-      log(`on error:`, err)
-      // conn.close()
-    })
-
-    socket.on("disconnect", (err) => {
-      log(`on disconnect:`, err)
-      // socket.close()
-      // socket.open()
-    })
     return conn
   }
 

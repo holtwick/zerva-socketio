@@ -12,9 +12,8 @@ Define your own Zerva Context events, which will be available for autocompletion
 import { useSocketIO } from "zerva-socketio"
 
 useHttp({
-  port: 8080
+  port: 8080,
 })
 
 useSocketIO()
 ```
-
