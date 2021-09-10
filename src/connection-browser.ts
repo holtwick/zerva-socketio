@@ -1,7 +1,6 @@
-import { empty, Logger, LoggerInterface, promisify } from "zeed"
-import { Socket, ManagerOptions, SocketOptions } from "socket.io-client"
-import io from "socket.io-client"
-
+import io, { ManagerOptions, Socket, SocketOptions } from "socket.io-client"
+import { ZSocketEmitOptions } from "./types"
+import { empty, Logger, LoggerInterface, promisify, tryTimeout } from "zeed"
 import "./types"
 
 const logName = "ws-client"
@@ -70,6 +69,27 @@ export class ZSocketIOConnection {
     })
   }
 
+  async emitWithOptions<U extends keyof ZSocketIOEvents>(
+    event: U,
+    options: ZSocketEmitOptions,
+    ...args: Parameters<ZSocketIOEvents[U]>
+  ): Promise<ReturnType<ZSocketIOEvents[U]> | undefined> {
+    try {
+      return await tryTimeout(
+        new Promise((resolve) => {
+          this.log(`emit(${event})`, args)
+          this.socket?.emit(event, args[0], (value: any) => {
+            this.log(`response for emit(${event}) =`, value)
+            resolve(value)
+          })
+        }),
+        options?.timeout || -1
+      )
+    } catch (err) {
+      this.log.warn(`emit(${event})`, err)
+    }
+  }
+
   async on<U extends keyof ZSocketIOEvents>(
     event: U,
     listener: ZSocketIOEvents[U]
@@ -103,7 +123,7 @@ export class ZSocketIOConnection {
   public static connect(
     host?: string,
     options?: ManagerOptions & SocketOptions
-  ): ZSocketIOConnection {
+  ): ZSocketIOConnection | undefined {
     let wsHost = host ?? getWebsocketUrlFromLocation()
     log("start connecting to", wsHost)
     const socket = io(wsHost, {
@@ -114,10 +134,9 @@ export class ZSocketIOConnection {
       reconnectionAttempts: Infinity,
       ...options,
     })
-
-    const conn = new ZSocketIOConnection(socket)
-
-    return conn
+    if (socket) {
+      return new ZSocketIOConnection(socket)
+    }
   }
 
   // static async broadcast<U extends keyof ZSocketIOEvents>(
