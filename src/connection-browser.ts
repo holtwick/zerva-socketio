@@ -95,8 +95,10 @@ export class ZSocketIOConnection {
   ): ZSocketIOConnection {
     let wsHost = host ?? getWebsocketUrlFromLocation()
     log("start connecting to", wsHost)
-    const socket = io(wsHost, options)
-    // transports: ["websocket"],
+    const socket = io(wsHost, {
+      transports: ["websocket"],
+      ...options,
+    })
     // reconnection: true,
     // reconnectionDelay: 1000,
     // reconnectionDelayMax: 3000,
