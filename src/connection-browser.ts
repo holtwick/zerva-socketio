@@ -17,12 +17,12 @@ export class ZSocketIOConnection {
     this.socket = socket
 
     if (this.socket?.id) {
-      this.log = Logger(`${this.socket?.id?.substr(0, 6)}:${logName}`)
+      this.log = Logger(`${this.shortId}:${logName}`)
     }
 
     // let didResolve = false
     socket.on("connect", () => {
-      this.log = Logger(`${this.socket?.id?.substr(0, 6)}:${logName}`)
+      this.log = Logger(`${this.shortId}:${logName}`)
       this.log(`on connect`)
       //   if (!didResolve) resolve(conn)
       //   didResolve = true
