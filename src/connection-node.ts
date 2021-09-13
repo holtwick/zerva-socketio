@@ -21,11 +21,15 @@ export class ZSocketIOConnection {
   verified: boolean = false
   log: any
 
+  get shortId() {
+    return String(this.socket?.id || "").substr(0, 6)
+  }
+
   constructor(socket: any, timeout: number = -1) {
     this.socket = socket
     this.id = socket.id
     this.timeout = timeout
-    this.log = Logger(`${this.id?.substr(0, 6)}:${logName}`)
+    this.log = Logger(`${this.shortId}:${logName}`)
   }
 
   /** Emits event and can return result. On timeout or other error `null` will be returned */
