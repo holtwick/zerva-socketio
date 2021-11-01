@@ -9,11 +9,11 @@
     "node": ">12.20.0 || ^14.13.1 || >=16.0.0"
   },
   "scripts": {
-    "start": "zerva index.ts"
+    "start": "ZEED=* zerva"
   },
   "dependencies": {
-    "zeed": "^0.5.12",
-    "zerva": "^0.4.27",
+    "zeed": "^0.7.55",
+    "zerva": "^0.4.52",
     "zerva-socketio": "file:.."
   },
   "author": "Dirk Holtwick",

@@ -1,4 +1,4 @@
-import io, { ManagerOptions, Socket, SocketOptions } from "socket.io-client"
+import { io, ManagerOptions, Socket, SocketOptions } from "socket.io-client"
 import { ZSocketEmitOptions } from "./types"
 import { empty, Logger, LoggerInterface, promisify, tryTimeout } from "zeed"
 import "./types"
@@ -10,7 +10,7 @@ export const getWebsocketUrlFromLocation = () =>
   "ws" + location.protocol.substr(4) + "//" + location.host
 
 export class ZSocketIOConnection {
-  private socket?: Socket
+  private socket?: any // Socket
   private log: LoggerInterface = log
 
   constructor(socket: Socket) {
@@ -21,19 +21,19 @@ export class ZSocketIOConnection {
     }
 
     // let didResolve = false
-    socket.on("connect", () => {
+    this.socket?.on("connect", () => {
       this.log = Logger(`${this.shortId}:${logName}`)
       this.log(`on connect`)
       //   if (!didResolve) resolve(conn)
       //   didResolve = true
     })
 
-    socket.on("error", (err) => {
+    this.socket?.on("error", (err: any) => {
       this.log(`on error:`, err)
       // conn.close()
     })
 
-    socket.on("disconnect", (err) => {
+    this.socket?.on("disconnect", (err: any) => {
       this.log(`on disconnect:`, err)
       // socket.close()
       // socket.open()
@@ -109,7 +109,7 @@ export class ZSocketIOConnection {
   }
 
   onAny(fn: any) {
-    this.socket?.onAny((...args) => {
+    this.socket?.onAny((...args: any[]) => {
       this.log("onAny", ...args)
       fn(...args)
     })
@@ -133,7 +133,7 @@ export class ZSocketIOConnection {
       reconnectionDelayMax: 3000,
       reconnectionAttempts: Infinity,
       ...options,
-    })
+    } as any)
     if (socket) {
       return new ZSocketIOConnection(socket)
     }
