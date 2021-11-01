@@ -42,6 +42,19 @@ export class ZSocketIOConnection {
     // this.socket?.onAny((...args) => {
     //   log("onAny", ...args)
     // })
+
+    // Hack to reconnect on iOS
+    // https://stackoverflow.com/a/4910900/140927
+    var now
+    var lastFired = new Date().getTime()
+    setInterval(() => {
+      now = new Date().getTime()
+      if (now - lastFired > 2000) {
+        this.socket?.close()
+        this.socket?.open()
+      }
+      lastFired = now
+    }, 500)
   }
 
   get id(): string {
@@ -132,6 +145,7 @@ export class ZSocketIOConnection {
       reconnectionDelay: 1000,
       reconnectionDelayMax: 3000,
       reconnectionAttempts: Infinity,
+      autoConnect: true,
       ...options,
     } as any)
     if (socket) {
