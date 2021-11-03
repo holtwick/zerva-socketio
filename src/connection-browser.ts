@@ -24,8 +24,6 @@ export class ZSocketIOConnection {
     this.socket?.on("connect", () => {
       this.log = Logger(`${this.shortId}:${logName}`)
       this.log(`on connect`)
-      //   if (!didResolve) resolve(conn)
-      //   didResolve = true
     })
 
     this.socket?.on("error", (err: any) => {
@@ -35,8 +33,6 @@ export class ZSocketIOConnection {
 
     this.socket?.on("disconnect", (err: any) => {
       this.log(`on disconnect:`, err)
-      // socket.close()
-      // socket.open()
     })
 
     // this.socket?.onAny((...args) => {
