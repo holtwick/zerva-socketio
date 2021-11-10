@@ -2,7 +2,7 @@
 
 import { Logger } from "zeed"
 import { on, emit, register, onInit, requireModules } from "zerva"
-import { Server, Socket } from "socket.io"
+import { Server, ServerOptions, Socket } from "socket.io"
 import { ZSocketIOConnection } from "./connection-node"
 import { detect } from "detect-browser"
 
@@ -11,6 +11,7 @@ const log = Logger(name)
 
 interface ZSocketIOConfig {
   debug?: boolean
+  options?: Partial<ServerOptions>
 }
 
 export function useSocketIO(config: ZSocketIOConfig = {}) {
@@ -31,7 +32,10 @@ export function useSocketIO(config: ZSocketIOConfig = {}) {
         origin: "*",
         methods: ["GET", "PUT", "POST"],
       },
+      ...config.options,
     })
+
+    emit("socketIOSetup", io)
 
     io.on("connection", (socket: Socket) => {
       let browserInfo = {} as any
